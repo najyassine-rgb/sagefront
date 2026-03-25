@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+// ✅ Interface goes here
 interface LoginResponse {
-  token: string;
-  user: { id: number; login: string };
+  token: string; // matches backend
+  user: { id: number; login: string; role: string };
 }
 
 @Injectable({
@@ -16,10 +17,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(login: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, {
-      login,
-      password,
-    });
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { login, password });
   }
 
   storeToken(token: string) {
