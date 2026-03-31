@@ -30,7 +30,7 @@ export const routes: Routes = [
   { path: 'flux', component: FluxComponent, canActivate: [authGuard] },
   { path: 'libelle', component: ParametrageLibelleComponent, canActivate: [authGuard] },
   {
-    path: '',
+    path: 'connexion',
     component: ConnexionComponent,
   },
 ];

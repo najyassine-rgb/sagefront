@@ -13,7 +13,8 @@ import { AuthService } from '../auth/auth.service';
 export class HomeComponent {
   //   menuItems: string[] = ['Connexion', 'Configuration', 'Paramétrage Correspondance', 'Traitement'];
   menuItems = [
-    { label: 'Connexion', route: '/home' },
+    // { label: 'Connexion', route: '/home' },
+    { label: 'Connexion', route: '/connexion' },
     { label: 'Configuration', route: '/config' },
     {
       label: 'Paramétrage Correspondance',

@@ -1,90 +1,48 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-connexion',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  // templateUrl: './connexion.html',
-  template: `
-    <div class="container">
-      <h2>Connexion</h2>
-
-      <div class="form-group">
-        <label>Société</label>
-        <select [(ngModel)]="societeX3">
-          <option value="">-- Sélectionner --</option>
-          <option *ngFor="let s of societes" [value]="s.CPY">{{ s.CPY }} - {{ s.CPYNAM }}</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Sage</label>
-        <input [(ngModel)]="sage" />
-      </div>
-
-      <div class="form-group">
-        <label>Société</label>
-        <input [(ngModel)]="societeXRT" />
-      </div>
-
-      <button (click)="valider()">Valider</button>
-    </div>
-  `,
-  styles: [
-    `
-      .container {
-        width: 400px;
-        margin: 60px auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-      }
-
-      .form-group {
-        margin-bottom: 15px;
-        display: flex;
-        flex-direction: column;
-      }
-
-      input,
-      select {
-        padding: 8px;
-        margin-top: 5px;
-      }
-
-      button {
-        padding: 10px;
-        width: 100%;
-      }
-    `,
-  ],
+  templateUrl: './connexion.html',
+  styleUrl: './connexion.css',
 })
 export class ConnexionComponent implements OnInit {
-  private http = inject(HttpClient);
-
   societes: any[] = [];
+  selectedSociete: string = '';
 
-  societeX3 = '';
-  sage = 'SEED';
-  societeXRT = '';
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    this.http.get<any>('/api/x3/societes').subscribe({
-      next: (res) => {
-        this.societes = res;
-      },
-      error: (err) => console.error(err),
-    });
+    // TODO: call API YCPY ici plus tard
+    this.societes = [];
   }
 
-  valider() {
-    console.log({
-      societeX3: this.societeX3,
-      sage: this.sage,
-      societeXRT: this.societeXRT,
-    });
+  //close button (X)
+  close() {
+    this.router.navigate(['/home']);
+  }
+
+  //annuler button
+  cancel() {
+    this.router.navigate(['/home']);
+  }
+
+  // ✅ validation société
+  validate() {
+    if (!this.selectedSociete) {
+      alert('Veuillez sélectionner une société');
+      return;
+    }
+
+    console.log('Société sélectionnée:', this.selectedSociete);
+
+    // 👉 plus tard: stocker en session / localStorage
+    localStorage.setItem('societe', this.selectedSociete);
+
+    this.router.navigate(['/home']);
   }
 }
