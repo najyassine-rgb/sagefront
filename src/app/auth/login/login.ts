@@ -9,9 +9,11 @@ import { AuthService } from '../auth.service';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.html',
+  styleUrls: ['./login.css'],
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  loading = false;
   errorMessage = '';
 
   constructor(
@@ -20,7 +22,7 @@ export class LoginComponent {
     private router: Router,
   ) {
     this.loginForm = this.fb.group({
-      login: ['', Validators.required],
+      login: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
@@ -28,15 +30,36 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.invalid) return;
 
-    const { login, password } = this.loginForm.value;
+    this.loading = true;
 
-    this.authService.login(login, password).subscribe({
-      next: (res) => {
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (res: any) => {
         this.authService.storeToken(res.token);
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Invalid credentials';
+      error: () => {
+        this.errorMessage = 'Email ou mot de passe incorrect';
+        this.loading = false;
+      },
+    });
+  }
+
+  forgotPassword() {
+    console.log('ok');
+    const email = this.loginForm.get('login')?.value;
+
+    if (!email) {
+      this.errorMessage = 'Veuillez saisir votre email';
+      return;
+    }
+
+    this.authService.forgotPassword(email).subscribe({
+      next: () => {
+        this.errorMessage = '';
+        alert('Email de réinitialisation envoyé ✅');
+      },
+      error: () => {
+        this.errorMessage = 'Erreur lors de la demande';
       },
     });
   }
