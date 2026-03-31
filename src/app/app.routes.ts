@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { ParametrageLibelleComponent } from './home/parametrage-libelle/parametrage-libelle';
 
 import { loginGuard } from './login.guard';
+import { ConnexionComponent } from './modules/connexion/connexion';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -28,4 +29,8 @@ export const routes: Routes = [
   { path: 'compte', component: CompteBancaireComponent, canActivate: [authGuard] },
   { path: 'flux', component: FluxComponent, canActivate: [authGuard] },
   { path: 'libelle', component: ParametrageLibelleComponent, canActivate: [authGuard] },
+  {
+    path: '',
+    component: ConnexionComponent,
+  },
 ];
